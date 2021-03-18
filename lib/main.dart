@@ -12,6 +12,7 @@ void main() {
         scaffoldBackgroundColor: Color(0xff13131B),
       ),
       home: SignUp(),
+      debugShowCheckedModeBanner: false,
       routes: {
         '/authorization': (context) => Authorization(),
         '/questionnaire': (context) => Questionnaire(),

@@ -8,6 +8,8 @@ class Authorization extends StatefulWidget {
   _AuthorizationState createState() => _AuthorizationState();
 }
 
+var code;
+
 class _AuthorizationState extends State<Authorization> {
   final flutterWebviewPlugin = new FlutterWebviewPlugin();
   GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
@@ -23,8 +25,7 @@ class _AuthorizationState extends State<Authorization> {
         if (mounted) {
           var res = await http.get(url);
           if (res.request.url.queryParameters['code'].isNotEmpty) {
-            var code = res.request.url.queryParameters['code'];
-            print('Authorization Code: ' + code);
+            code = res.request.url.queryParameters['code'];
             flutterWebviewPlugin.close();
             Navigator.pushNamed(context, '/questionnaire');
           }
@@ -37,10 +38,12 @@ class _AuthorizationState extends State<Authorization> {
 
   @override
   Widget build(BuildContext context) {
+    String query = 'https://accounts.spotify.com/authorize?';
+    String urlHeader =
+        'client_id=5a9756f5bf2d45398a737632c8aa867b&response_type=code&redirect_uri=https://musically-mine.000webhostapp.com/index.php&scope=user-read-private%20user-read-email%20user-top-read';
     return WebviewScaffold(
       key: scaffoldKey,
-      url:
-          'https://accounts.spotify.com/authorize?client_id=5a9756f5bf2d45398a737632c8aa867b&response_type=code&redirect_uri=https://musically-mine.000webhostapp.com/index.php&scope=user-read-private%20user-read-email%20user-top-read&show_dialog=true',
+      url: query + urlHeader,
       hidden: true,
     );
   }
