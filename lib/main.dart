@@ -1,5 +1,6 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
+import 'package:musically_mine/homeActivity.dart';
 import 'package:musically_mine/questionnaire.dart';
 import 'authorization.dart';
 
@@ -16,6 +17,7 @@ void main() {
       routes: {
         '/authorization': (context) => Authorization(),
         '/questionnaire': (context) => Questionnaire(),
+        '/homeActivity': (context) => HomeActivity(),
       },
     ),
   );
@@ -31,9 +33,12 @@ class SignUp extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Image.asset('images/logo.png'),
+              SizedBox(
+                height: 5.0,
+              ),
               Text(
                 'Musically Mine',
-                style: TextStyle(fontFamily: 'CaveatBrush', fontSize: 25.00),
+                style: TextStyle(fontFamily: 'ProximaLight', fontSize: 25.00),
               ),
               Card(
                 shape: RoundedRectangleBorder(
@@ -43,7 +48,7 @@ class SignUp extends StatelessWidget {
                 color: Color(0xff1DB954),
                 child: ListTile(
                   onTap: () {
-                    Navigator.pushNamed(context, '/authorization');
+                    Navigator.popAndPushNamed(context, '/authorization');
                   },
                   leading: Padding(
                     padding: EdgeInsets.all(10.0),

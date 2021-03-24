@@ -27,7 +27,7 @@ class _AuthorizationState extends State<Authorization> {
           if (res.request.url.queryParameters['code'].isNotEmpty) {
             code = res.request.url.queryParameters['code'];
             flutterWebviewPlugin.close();
-            Navigator.pushNamed(context, '/questionnaire');
+            Navigator.popAndPushNamed(context, '/questionnaire');
           }
           // if (res.statusCode != 200)
           //   throw Exception('http.get error: statusCode= ${res.statusCode}');
