@@ -121,198 +121,199 @@ class _QuestionnaireState extends State<Questionnaire> {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: IntroductionScreen(
-        key: introKey,
-        pages: [
-          PageViewModel(
-            titleWidget: Padding(
-              padding: EdgeInsets.only(top: 100.00),
-              child: Text(
-                "Name?",
-                style: TextStyle(
-                  color: Color(0xffF6265A),
-                  fontSize: 60.0,
-                  fontFamily: 'ProximaLight',
-                  decoration: TextDecoration.none,
+    return SafeArea(
+      child: Center(
+        child: IntroductionScreen(
+          key: introKey,
+          pages: [
+            PageViewModel(
+              titleWidget: Padding(
+                padding: EdgeInsets.only(top: 100.00),
+                child: Text(
+                  "Name?",
+                  style: TextStyle(
+                    color: Color(0xffF6265A),
+                    fontSize: 60.0,
+                    fontFamily: 'ProximaLight',
+                    decoration: TextDecoration.none,
+                  ),
                 ),
               ),
-            ),
-            bodyWidget: Padding(
-              padding: EdgeInsets.fromLTRB(20.0, 0.0, 20.0, 20.0),
-              child: Form(
-                key: name_key,
-                child: TextFormField(
-                  validator: (text) {
-                    if (text.isEmpty) {
-                      return "Oops! We didn't get your name";
-                    }
-                    return null;
-                  },
-                  decoration: new InputDecoration(
-                      border: new OutlineInputBorder(
-                        borderRadius: const BorderRadius.all(
-                          const Radius.circular(50.0),
+              bodyWidget: Padding(
+                padding: EdgeInsets.fromLTRB(20.0, 0.0, 20.0, 20.0),
+                child: Form(
+                  key: name_key,
+                  child: TextFormField(
+                    validator: (text) {
+                      if (text.isEmpty) {
+                        return "Oops! We didn't get your name";
+                      }
+                      return null;
+                    },
+                    decoration: new InputDecoration(
+                        border: new OutlineInputBorder(
+                          borderRadius: const BorderRadius.all(
+                            const Radius.circular(50.0),
+                          ),
                         ),
-                      ),
-                      filled: false,
-                      hintStyle: new TextStyle(color: Colors.grey[700]),
-                      hintText: "Your name",
-                      fillColor: Color(0x50FFFFFF)),
+                        filled: false,
+                        hintStyle: new TextStyle(color: Colors.grey[700]),
+                        hintText: "Your name",
+                        fillColor: Color(0x50FFFFFF)),
+                  ),
                 ),
               ),
             ),
-          ),
-          PageViewModel(
-            titleWidget: Padding(
-              padding: EdgeInsets.only(top: 100.00),
-              child: Text(
-                "I'm",
-                style: TextStyle(
-                  color: Color(0xffF6265A),
-                  fontSize: 60.0,
-                  fontFamily: 'ProximaLight',
-                  decoration: TextDecoration.none,
+            PageViewModel(
+              titleWidget: Padding(
+                padding: EdgeInsets.only(top: 100.00),
+                child: Text(
+                  "I'm",
+                  style: TextStyle(
+                    color: Color(0xffF6265A),
+                    fontSize: 60.0,
+                    fontFamily: 'ProximaLight',
+                    decoration: TextDecoration.none,
+                  ),
                 ),
               ),
-            ),
-            bodyWidget: Padding(
-              padding: EdgeInsets.fromLTRB(20.0, 0.0, 20.0, 20.0),
-              child: CustomRadioButton(
-                width: 150.00,
-                elevation: 10,
-                enableShape: true,
-                enableButtonWrap: true,
-                wrapAlignment: WrapAlignment.center,
-                unSelectedColor: Color(0x50FFFFFF),
-                buttonLables: [
-                  'Male',
-                  'Female',
-                ],
-                buttonValues: [
-                  "Male",
-                  "Female",
-                ],
-                buttonTextStyle: ButtonTextStyle(
-                    selectedColor: Colors.white,
-                    unSelectedColor: Colors.white,
-                    textStyle: TextStyle(fontSize: 16)),
-                radioButtonValue: (value) {
-                  gender_check = true;
-                },
-                selectedColor: Color(0xffF6265A),
-              ),
-            ),
-          ),
-          PageViewModel(
-            titleWidget: Padding(
-              padding: EdgeInsets.only(top: 100.00),
-              child: Text(
-                "Interested in",
-                style: TextStyle(
-                  color: Color(0xffF6265A),
-                  fontSize: 60.0,
-                  fontFamily: 'ProximaLight',
-                  decoration: TextDecoration.none,
-                ),
-              ),
-            ),
-            bodyWidget: Padding(
-              padding: EdgeInsets.fromLTRB(20.0, 0.0, 20.0, 20.0),
-              child: CustomRadioButton(
-                width: 150.00,
-                elevation: 10,
-                enableShape: true,
-                enableButtonWrap: true,
-                wrapAlignment: WrapAlignment.center,
-                unSelectedColor: Color(0x50FFFFFF),
-                buttonLables: ['Male', 'Female', 'Everyone'],
-                buttonValues: ["MALE", "FEMALE", "EVERYONE"],
-                buttonTextStyle: ButtonTextStyle(
-                    selectedColor: Colors.white,
-                    unSelectedColor: Colors.white,
-                    textStyle: TextStyle(fontSize: 16)),
-                radioButtonValue: (value) {
-                  print("Gender " + value);
-                  interested_gender_check = true;
-                },
-                selectedColor: Color(0xffF6265A),
-              ),
-            ),
-          ),
-          PageViewModel(
-            titleWidget: Padding(
-              padding: EdgeInsets.only(top: 100.00),
-              child: Text(
-                "Date of Birth",
-                style: TextStyle(
-                  color: Color(0xffF6265A),
-                  fontSize: 60.0,
-                  fontFamily: 'ProximaLight',
-                  decoration: TextDecoration.none,
-                ),
-              ),
-            ),
-            bodyWidget: Padding(
-              padding: EdgeInsets.fromLTRB(20.0, 0.0, 20.0, 20.0),
-              child: Form(
-                key: dob_key,
-                child: TextFormField(
-                  validator: (text) {
-                    if (text.isEmpty) {
-                      return "Oops! We didn't get your birth date";
-                    }
-                    return null;
+              bodyWidget: Padding(
+                padding: EdgeInsets.fromLTRB(20.0, 0.0, 20.0, 20.0),
+                child: CustomRadioButton(
+                  elevation: 10,
+                  enableShape: true,
+                  enableButtonWrap: true,
+                  wrapAlignment: WrapAlignment.center,
+                  unSelectedColor: Color(0x50FFFFFF),
+                  buttonLables: [
+                    'Male',
+                    'Female',
+                  ],
+                  buttonValues: [
+                    "Male",
+                    "Female",
+                  ],
+                  buttonTextStyle: ButtonTextStyle(
+                      selectedColor: Colors.white,
+                      unSelectedColor: Colors.white,
+                      textStyle: TextStyle(fontSize: 16)),
+                  radioButtonValue: (value) {
+                    gender_check = true;
                   },
-                  controller: textController,
-                  decoration: new InputDecoration(
-                      border: new OutlineInputBorder(
-                        borderRadius: const BorderRadius.all(
-                          const Radius.circular(50.0),
+                  selectedColor: Color(0xffF6265A),
+                ),
+              ),
+            ),
+            PageViewModel(
+              titleWidget: Padding(
+                padding: EdgeInsets.only(top: 100.00),
+                child: Text(
+                  "Interested in",
+                  style: TextStyle(
+                    color: Color(0xffF6265A),
+                    fontSize: 60.0,
+                    fontFamily: 'ProximaLight',
+                    decoration: TextDecoration.none,
+                  ),
+                ),
+              ),
+              bodyWidget: Padding(
+                padding: EdgeInsets.fromLTRB(20.0, 0.0, 20.0, 20.0),
+                child: CustomRadioButton(
+                  elevation: 10,
+                  enableShape: true,
+                  enableButtonWrap: true,
+                  wrapAlignment: WrapAlignment.center,
+                  unSelectedColor: Color(0x50FFFFFF),
+                  buttonLables: ['Male', 'Female', 'Everyone'],
+                  buttonValues: ["MALE", "FEMALE", "EVERYONE"],
+                  buttonTextStyle: ButtonTextStyle(
+                      selectedColor: Colors.white,
+                      unSelectedColor: Colors.white,
+                      textStyle: TextStyle(fontSize: 16)),
+                  radioButtonValue: (value) {
+                    print("Gender " + value);
+                    interested_gender_check = true;
+                  },
+                  selectedColor: Color(0xffF6265A),
+                ),
+              ),
+            ),
+            PageViewModel(
+              titleWidget: Padding(
+                padding: EdgeInsets.only(top: 100.00),
+                child: Text(
+                  "Date of Birth",
+                  style: TextStyle(
+                    color: Color(0xffF6265A),
+                    fontSize: 60.0,
+                    fontFamily: 'ProximaLight',
+                    decoration: TextDecoration.none,
+                  ),
+                ),
+              ),
+              bodyWidget: Padding(
+                padding: EdgeInsets.fromLTRB(20.0, 0.0, 20.0, 20.0),
+                child: Form(
+                  key: dob_key,
+                  child: TextFormField(
+                    validator: (text) {
+                      if (text.isEmpty) {
+                        return "Oops! We didn't get your birth date";
+                      }
+                      return null;
+                    },
+                    controller: textController,
+                    decoration: new InputDecoration(
+                        border: new OutlineInputBorder(
+                          borderRadius: const BorderRadius.all(
+                            const Radius.circular(50.0),
+                          ),
                         ),
-                      ),
-                      filled: false,
-                      hintStyle: new TextStyle(color: Colors.grey[700]),
-                      hintText: "Your date of birth",
-                      fillColor: Color(0x50FFFFFF)),
-                  onTap: () {
-                    pickBdate(context);
-                  },
+                        filled: false,
+                        hintStyle: new TextStyle(color: Colors.grey[700]),
+                        hintText: "Your date of birth",
+                        fillColor: Color(0x50FFFFFF)),
+                    onTap: () {
+                      pickBdate(context);
+                    },
+                  ),
                 ),
               ),
             ),
-          ),
-          PageViewModel(
-            title: "",
-            bodyWidget: Container(
-              height: 170.0,
-              child: ListView(
-                scrollDirection: Axis.horizontal,
-                children: [
-                  my_container(),
-                  my_container(),
-                  my_container(),
-                ],
+            PageViewModel(
+              title: "",
+              bodyWidget: Container(
+                height: 170.0,
+                child: ListView(
+                  scrollDirection: Axis.horizontal,
+                  children: [
+                    my_container(),
+                    my_container(),
+                    my_container(),
+                  ],
+                ),
               ),
+            )
+          ],
+          onDone: () => _onIntroEnd(context),
+          onChange: (int a) => validate(),
+          //onSkip: () => _onIntroEnd(context), // You can override onSkip callback
+          showSkipButton: false,
+          skipFlex: 0,
+          nextFlex: 0,
+          skip: const Text('Skip'),
+          next: const Icon(Icons.arrow_forward),
+          done:
+              const Text('Done', style: TextStyle(fontWeight: FontWeight.w600)),
+          dotsDecorator: const DotsDecorator(
+            size: Size(10.0, 10.0),
+            color: Color(0x50F6265A),
+            activeColor: Color(0xffF6265A),
+            activeSize: Size(22.0, 10.0),
+            activeShape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(Radius.circular(25.0)),
             ),
-          )
-        ],
-        onDone: () => _onIntroEnd(context),
-        onChange: (int a) => validate(),
-        //onSkip: () => _onIntroEnd(context), // You can override onSkip callback
-        showSkipButton: false,
-        skipFlex: 0,
-        nextFlex: 0,
-        skip: const Text('Skip'),
-        next: const Icon(Icons.arrow_forward),
-        done: const Text('Done', style: TextStyle(fontWeight: FontWeight.w600)),
-        dotsDecorator: const DotsDecorator(
-          size: Size(10.0, 10.0),
-          color: Color(0x50F6265A),
-          activeColor: Color(0xffF6265A),
-          activeSize: Size(22.0, 10.0),
-          activeShape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.all(Radius.circular(25.0)),
           ),
         ),
       ),

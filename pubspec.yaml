@@ -22,6 +22,7 @@ environment:
 
 dependencies:
   introduction_screen: 1.0.9
+  swipeable_card_stack: ^0.0.2
   molten_navigationbar_flutter: ^0.0.1
   http: ^0.12.0
   webview_flutter: 0.2.0
