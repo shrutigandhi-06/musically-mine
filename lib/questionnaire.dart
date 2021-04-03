@@ -15,16 +15,24 @@ class Questionnaire extends StatefulWidget {
 class _QuestionnaireState extends State<Questionnaire> {
   final introKey = GlobalKey<IntroductionScreenState>();
   GlobalKey<FormState> name_key = GlobalKey<FormState>();
+  GlobalKey<FormState> city_key = GlobalKey<FormState>();
+  GlobalKey<FormState> state_key = GlobalKey<FormState>();
   GlobalKey<FormState> dob_key = GlobalKey<FormState>();
   bool gender_check = false;
   bool interested_gender_check = false;
+  final name_controller = TextEditingController();
+  final city_controller = TextEditingController();
+  final state_controller = TextEditingController();
+  final date_controller = TextEditingController();
+  String gender, interested_gender, id;
+  int user_age;
 
   void _onIntroEnd(context) {
+    sendUserData();
     Navigator.popAndPushNamed(context, '/homeActivity');
   }
 
   DateTime birth_date = DateTime.now();
-  var textController = TextEditingController();
 
   Future<Null> pickBdate(BuildContext context) async {
     final date_picked = await showDatePicker(
@@ -49,11 +57,13 @@ class _QuestionnaireState extends State<Questionnaire> {
       setState(
         () {
           birth_date = date_picked;
-          textController.text = birth_date.day.toString() +
+          date_controller.text = birth_date.day.toString() +
               '/' +
               birth_date.month.toString() +
               '/' +
               birth_date.year.toString();
+          findAge(DateTime.now().day, DateTime.now().month, DateTime.now().year,
+              birth_date.day, birth_date.month, birth_date.year);
         },
       );
     }
@@ -98,22 +108,46 @@ class _QuestionnaireState extends State<Questionnaire> {
         {
           if (!(name_key.currentState.validate()))
             introKey.currentState.animateScroll(0);
+          FocusScopeNode currentFocus = FocusScope.of(context);
+          currentFocus.unfocus();
           break;
         }
       case 1:
         {
           if (!gender_check) introKey.currentState.animateScroll(1);
+          FocusScopeNode currentFocus = FocusScope.of(context);
+          currentFocus.unfocus();
           break;
         }
       case 2:
         {
           if (!interested_gender_check) introKey.currentState.animateScroll(2);
+          FocusScopeNode currentFocus = FocusScope.of(context);
+          currentFocus.unfocus();
           break;
         }
       case 3:
         {
           if (!(dob_key.currentState.validate()))
             introKey.currentState.animateScroll(3);
+          FocusScopeNode currentFocus = FocusScope.of(context);
+          currentFocus.unfocus();
+          break;
+        }
+      case 4:
+        {
+          if (!(city_key.currentState.validate()))
+            introKey.currentState.animateScroll(4);
+          FocusScopeNode currentFocus = FocusScope.of(context);
+          currentFocus.unfocus();
+          break;
+        }
+      case 5:
+        {
+          if (!(state_key.currentState.validate()))
+            introKey.currentState.animateScroll(5);
+          FocusScopeNode currentFocus = FocusScope.of(context);
+          currentFocus.unfocus();
           break;
         }
     }
@@ -144,6 +178,8 @@ class _QuestionnaireState extends State<Questionnaire> {
                 child: Form(
                   key: name_key,
                   child: TextFormField(
+                    textCapitalization: TextCapitalization.words,
+                    controller: name_controller,
                     validator: (text) {
                       if (text.isEmpty) {
                         return "Oops! We didn't get your name";
@@ -198,6 +234,7 @@ class _QuestionnaireState extends State<Questionnaire> {
                       unSelectedColor: Colors.white,
                       textStyle: TextStyle(fontSize: 16)),
                   radioButtonValue: (value) {
+                    gender = value;
                     gender_check = true;
                   },
                   selectedColor: Color(0xffF6265A),
@@ -226,13 +263,13 @@ class _QuestionnaireState extends State<Questionnaire> {
                   wrapAlignment: WrapAlignment.center,
                   unSelectedColor: Color(0x50FFFFFF),
                   buttonLables: ['Male', 'Female', 'Everyone'],
-                  buttonValues: ["MALE", "FEMALE", "EVERYONE"],
+                  buttonValues: ["Male", "Female", "Everyone"],
                   buttonTextStyle: ButtonTextStyle(
                       selectedColor: Colors.white,
                       unSelectedColor: Colors.white,
                       textStyle: TextStyle(fontSize: 16)),
                   radioButtonValue: (value) {
-                    print("Gender " + value);
+                    interested_gender = value;
                     interested_gender_check = true;
                   },
                   selectedColor: Color(0xffF6265A),
@@ -257,13 +294,13 @@ class _QuestionnaireState extends State<Questionnaire> {
                 child: Form(
                   key: dob_key,
                   child: TextFormField(
+                    controller: date_controller,
                     validator: (text) {
                       if (text.isEmpty) {
                         return "Oops! We didn't get your birth date";
                       }
                       return null;
                     },
-                    controller: textController,
                     decoration: new InputDecoration(
                         border: new OutlineInputBorder(
                           borderRadius: const BorderRadius.all(
@@ -277,6 +314,86 @@ class _QuestionnaireState extends State<Questionnaire> {
                     onTap: () {
                       pickBdate(context);
                     },
+                  ),
+                ),
+              ),
+            ),
+            PageViewModel(
+              titleWidget: Padding(
+                padding: EdgeInsets.only(top: 100.00),
+                child: Text(
+                  "City?",
+                  style: TextStyle(
+                    color: Color(0xffF6265A),
+                    fontSize: 60.0,
+                    fontFamily: 'ProximaLight',
+                    decoration: TextDecoration.none,
+                  ),
+                ),
+              ),
+              bodyWidget: Padding(
+                padding: EdgeInsets.fromLTRB(20.0, 0.0, 20.0, 20.0),
+                child: Form(
+                  key: city_key,
+                  child: TextFormField(
+                    textCapitalization: TextCapitalization.words,
+                    controller: city_controller,
+                    validator: (text) {
+                      if (text.isEmpty) {
+                        return "Oops! We didn't get your city";
+                      }
+                      return null;
+                    },
+                    decoration: new InputDecoration(
+                        border: new OutlineInputBorder(
+                          borderRadius: const BorderRadius.all(
+                            const Radius.circular(50.0),
+                          ),
+                        ),
+                        filled: false,
+                        hintStyle: new TextStyle(color: Colors.grey[700]),
+                        hintText: "Your city",
+                        fillColor: Color(0x50FFFFFF)),
+                  ),
+                ),
+              ),
+            ),
+            PageViewModel(
+              titleWidget: Padding(
+                padding: EdgeInsets.only(top: 100.00),
+                child: Text(
+                  "State?",
+                  style: TextStyle(
+                    color: Color(0xffF6265A),
+                    fontSize: 60.0,
+                    fontFamily: 'ProximaLight',
+                    decoration: TextDecoration.none,
+                  ),
+                ),
+              ),
+              bodyWidget: Padding(
+                padding: EdgeInsets.fromLTRB(20.0, 0.0, 20.0, 20.0),
+                child: Form(
+                  key: state_key,
+                  child: TextFormField(
+                    textCapitalization: TextCapitalization.words,
+                    controller: state_controller,
+                    validator: (text) {
+                      if (text.isEmpty) {
+                        return "Oops! We didn't get your state";
+                      }
+                      return null;
+                    },
+                    decoration: new InputDecoration(
+                        border: new OutlineInputBorder(
+                          borderRadius: const BorderRadius.all(
+                            const Radius.circular(50.0),
+                          ),
+                        ),
+                        filled: false,
+                        hintStyle: new TextStyle(color: Colors.grey[700]),
+                        hintText: "Your state",
+                        fillColor: Color(0x50FFFFFF)),
                   ),
                 ),
               ),
@@ -330,7 +447,7 @@ class _QuestionnaireState extends State<Questionnaire> {
       'authCode': code,
     };
 
-    //sending authCode to the server via POST reuest
+    //sending authCode to the server via POST request
     var res = await http.post(
         'https://musically-mine.000webhostapp.com/userInsights.php',
         headers: headers,
@@ -341,6 +458,63 @@ class _QuestionnaireState extends State<Questionnaire> {
       throw Exception('http.post error: statusCode= ${res.statusCode}');
 
     print(res.request.url);
+    String temp = res.body.toString();
+    id = temp.substring(temp.length - 28, temp.length);
+    print(temp);
+  }
+
+  Future<void> sendUserData() async {
+    var name = name_controller.text;
+    var dob = date_controller.text;
+    var city = city_controller.text;
+    var state = state_controller.text;
+
+    var headers = <String, String>{
+      'Content-Type': 'application/x-www-form-urlencoded',
+    };
+
+    var data = {
+      'id': id,
+      'name': name,
+      'gender': gender,
+      'interested_gender': interested_gender,
+      'age': user_age.toString(),
+      'city': city,
+      'state': state
+    };
+
+    //sending authCode to the server via POST reuest
+    var res = await http.post(
+        'https://musically-mine.000webhostapp.com/addUser.php',
+        headers: headers,
+        body: data,
+        encoding: Encoding.getByName("utf-8"));
+
+    if (res.statusCode != 200)
+      throw Exception('http.post error: statusCode= ${res.statusCode}');
+
+    print(res.request.url);
     print(res.body);
+  }
+
+  void findAge(int current_date, int current_month, int current_year,
+      int birth_date, int birth_month, int birth_year) {
+    var month = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+
+    if (birth_date > current_date) {
+      current_month = current_month - 1;
+      current_date = current_date + month[birth_month - 1];
+    }
+
+    if (birth_month > current_month) {
+      current_year = current_year - 1;
+      current_month = current_month + 12;
+    }
+
+    // calculate date, month, year
+    int calculated_year = current_year - birth_year;
+
+    // print the present age
+    user_age = calculated_year;
   }
 }
