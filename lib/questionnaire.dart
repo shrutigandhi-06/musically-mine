@@ -27,6 +27,12 @@ class _QuestionnaireState extends State<Questionnaire> {
   String gender, interested_gender, id;
   int user_age;
 
+  List<String> artists_list = [];
+  List<String> artists_img = [];
+
+  List<String> tracks_list = [];
+  List<String> tracks_img = [];
+
   void _onIntroEnd(context) {
     sendUserData();
     Navigator.popAndPushNamed(context, '/homeActivity');
@@ -69,20 +75,29 @@ class _QuestionnaireState extends State<Questionnaire> {
     }
   }
 
-  Container my_container() {
+  Container my_container(String url, String name) {
     return Container(
       margin: EdgeInsets.all(3.0),
       width: 150.0,
       child: Card(
+        color: Colors.white.withAlpha(40),
         child: Padding(
           padding: EdgeInsets.all(10.0),
           child: Wrap(
             children: [
-              Image.asset('images/logo.png'),
               Align(
                 alignment: Alignment.center,
-                child: Text(
-                  'Artist 1',
+                child: Image.network(
+                  url,
+                ),
+              ),
+              Align(
+                alignment: Alignment.center,
+                child: Padding(
+                  padding: EdgeInsets.all(5.0),
+                  child: Text(
+                    name,
+                  ),
                 ),
               ),
             ],
@@ -259,6 +274,7 @@ class _QuestionnaireState extends State<Questionnaire> {
                 child: CustomRadioButton(
                   elevation: 10,
                   enableShape: true,
+                  autoWidth: true,
                   enableButtonWrap: true,
                   wrapAlignment: WrapAlignment.center,
                   unSelectedColor: Color(0x50FFFFFF),
@@ -400,18 +416,39 @@ class _QuestionnaireState extends State<Questionnaire> {
             ),
             PageViewModel(
               title: "",
-              bodyWidget: Container(
-                height: 170.0,
-                child: ListView(
-                  scrollDirection: Axis.horizontal,
-                  children: [
-                    my_container(),
-                    my_container(),
-                    my_container(),
-                  ],
-                ),
+              bodyWidget: Column(
+                children: [
+                  Text(
+                    'Top Tracks',
+                    style: TextStyle(fontSize: 30.0),
+                  ),
+                  Container(
+                    height: 180.0,
+                    child: ListView(
+                      scrollDirection: Axis.horizontal,
+                      children: [
+                        for (var i = 0; i < tracks_list.length; i++)
+                          my_container(tracks_img[i], tracks_list[i]),
+                      ],
+                    ),
+                  ),
+                  Text(
+                    'Top Artists',
+                    style: TextStyle(fontSize: 30.0),
+                  ),
+                  Container(
+                    height: 180.0,
+                    child: ListView(
+                      scrollDirection: Axis.horizontal,
+                      children: [
+                        for (var i = 0; i < artists_list.length; i++)
+                          my_container(artists_img[i], artists_list[i]),
+                      ],
+                    ),
+                  ),
+                ],
               ),
-            )
+            ),
           ],
           onDone: () => _onIntroEnd(context),
           onChange: (int a) => validate(),
@@ -458,9 +495,30 @@ class _QuestionnaireState extends State<Questionnaire> {
       throw Exception('http.post error: statusCode= ${res.statusCode}');
 
     print(res.request.url);
-    String temp = res.body.toString();
-    id = temp.substring(temp.length - 28, temp.length);
-    print(temp);
+    var temp = jsonDecode(res.body.toString());
+    var top_tracks_json = temp[0];
+    var top_artists_json = temp[1];
+    id = temp[2];
+    var tracks_temporary = jsonDecode(top_tracks_json);
+    var artists_temporary = jsonDecode(top_artists_json);
+
+    tracks_temporary['items'].forEach((item) {
+      //print(item['name']);
+      //print(item['album']['images'][1]['url']);
+      tracks_list.add(item['name']);
+      tracks_img.add(item['album']['images'][1]['url']);
+    });
+
+    artists_temporary['items'].forEach((item) {
+      //print(item['name']);
+      //print(item['images'][2]['url']);
+      artists_list.add(item['name']);
+      artists_img.add(item['images'][2]['url']);
+    });
+    print(artists_list.toString());
+    print(tracks_list.toString());
+    print(id);
+    //print(temp[1].toString());
   }
 
   Future<void> sendUserData() async {
@@ -480,10 +538,12 @@ class _QuestionnaireState extends State<Questionnaire> {
       'interested_gender': interested_gender,
       'age': user_age.toString(),
       'city': city,
-      'state': state
+      'state': state,
+      'artists': artists_list.toString(),
+      'tracks': tracks_list.toString()
     };
 
-    //sending authCode to the server via POST reuest
+    //sending top artists and tracks to the server via POST request
     var res = await http.post(
         'https://musically-mine.000webhostapp.com/addUser.php',
         headers: headers,

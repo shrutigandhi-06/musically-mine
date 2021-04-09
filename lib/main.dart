@@ -3,11 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:musically_mine/homeActivity.dart';
 import 'package:musically_mine/questionnaire.dart';
 import 'authorization.dart';
+import 'user_profile.dart';
 
 void main() {
   runApp(
     MaterialApp(
       theme: ThemeData.dark().copyWith(
+        textTheme: ThemeData.dark().textTheme.apply(fontFamily: 'ProximaLight'),
         primaryColor: Color(0xff13131B),
         accentColor: Color(0xffF6265A),
         scaffoldBackgroundColor: Color(0xff13131B),

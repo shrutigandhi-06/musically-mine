@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'profile_recommendations.dart';
 import 'package:molten_navigationbar_flutter/molten_navigationbar_flutter.dart';
+import 'package:musically_mine/user_profile.dart';
 
 class HomeActivity extends StatefulWidget {
   @override
@@ -29,7 +30,7 @@ Widget index(int selected_index) {
       {
         return Center(
           child: Container(
-            child: Text('Tab 2'),
+            child: UserProfile(),
           ),
         );
       }
@@ -78,7 +79,7 @@ class _HomeActivityState extends State<HomeActivity> {
           // insert as many tabs as you like
           tabs: [
             MoltenTab(
-              icon: Icon(Icons.search),
+              icon: Icon(Icons.chat_bubble),
               selectedColor: Colors.white,
             ),
             MoltenTab(
