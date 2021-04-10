@@ -20,6 +20,7 @@ void main() {
         '/authorization': (context) => Authorization(),
         '/questionnaire': (context) => Questionnaire(),
         '/homeActivity': (context) => HomeActivity(),
+        '/userProfile': (context) => UserProfile()
       },
     ),
   );

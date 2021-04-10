@@ -1,4 +1,6 @@
+import 'dart:convert';
 import 'dart:io';
+import 'package:http/http.dart' as http;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -6,11 +8,22 @@ import 'package:introduction_screen/introduction_screen.dart';
 import 'package:custom_radio_grouped_button/custom_radio_grouped_button.dart';
 import 'package:numberpicker/numberpicker.dart';
 import 'package:image_picker/image_picker.dart';
+import 'questionnaire.dart';
 
 class UserProfile extends StatefulWidget {
   @override
   _UserProfileState createState() => _UserProfileState();
 }
+
+String Gheight = '',
+    Gexercise = '',
+    Gstar_sign = '',
+    Gpets = '',
+    Gdrinking = '',
+    Gsmoking = '',
+    Glooking_for = '';
+
+final height_controller = TextEditingController();
 
 File _image1, _image2, _image3, _image4, _image5;
 
@@ -99,6 +112,13 @@ class _UserProfileState extends State<UserProfile> {
           break;
         }
     }
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    sendUserPrefs();
   }
 
   @override
@@ -375,6 +395,66 @@ class _UserProfileState extends State<UserProfile> {
           );
         });
   }
+
+  Future<void> sendUserPrefs() async {
+    var headers = <String, String>{
+      'Content-Type': 'application/x-www-form-urlencoded',
+    };
+
+    var data = {
+      'id': id,
+      'pets': Gpets,
+      'height': Gheight,
+      'exercise': Gexercise,
+      'star_sign': Gstar_sign,
+      'drinking': Gdrinking,
+      'smoking': Gsmoking,
+      'looking_for': Glooking_for
+    };
+
+    //sending top artists and tracks to the server via POST request
+    var res = await http.post(
+        'https://musically-mine.000webhostapp.com/insertUserProfile.php',
+        headers: headers,
+        body: data,
+        encoding: Encoding.getByName("utf-8"));
+
+    if (res.statusCode != 200)
+      throw Exception('http.post error: statusCode= ${res.statusCode}');
+
+    print(res.request.url);
+    print(res.body);
+  }
+}
+
+Future<void> updateUserPrefs() async {
+  var headers = <String, String>{
+    'Content-Type': 'application/x-www-form-urlencoded',
+  };
+
+  var data = {
+    'id': id,
+    'pets': Gpets,
+    'height': Gheight,
+    'exercise': Gexercise,
+    'star_sign': Gstar_sign,
+    'drinking': Gdrinking,
+    'smoking': Gsmoking,
+    'looking_for': Glooking_for
+  };
+
+  //sending top artists and tracks to the server via POST request
+  var res = await http.post(
+      'https://musically-mine.000webhostapp.com/updateUserProfile.php',
+      headers: headers,
+      body: data,
+      encoding: Encoding.getByName("utf-8"));
+
+  if (res.statusCode != 200)
+    throw Exception('http.post error: statusCode= ${res.statusCode}');
+
+  print(res.request.url);
+  print(res.body);
 }
 
 class InfoTile extends StatefulWidget {
@@ -446,30 +526,63 @@ class _InfoTileState extends State<InfoTile> {
                     key: introKey,
                     pages: [
                       PageViewModel(
-                          titleWidget: Padding(
-                            padding: EdgeInsets.only(top: 100.00),
-                            child: Column(
-                              children: [
-                                Padding(
-                                  padding: EdgeInsets.only(bottom: 10.0),
-                                  child: Icon(
-                                    Icons.height,
-                                    size: 40.0,
-                                    color: Theme.of(context).accentColor,
-                                  ),
+                        titleWidget: Padding(
+                          padding: EdgeInsets.only(top: 100.00),
+                          child: Column(
+                            children: [
+                              Padding(
+                                padding: EdgeInsets.only(bottom: 10.0),
+                                child: Icon(
+                                  Icons.height,
+                                  size: 40.0,
+                                  color: Theme.of(context).accentColor,
                                 ),
-                                Text(
-                                  "What's your height?",
-                                  style: TextStyle(
-                                    color: Color(0xffF6265A),
-                                    fontSize: 30.0,
-                                    decoration: TextDecoration.none,
-                                  ),
+                              ),
+                              Text(
+                                "What's your height?",
+                                style: TextStyle(
+                                  color: Color(0xffF6265A),
+                                  fontSize: 30.0,
+                                  decoration: TextDecoration.none,
                                 ),
-                              ],
-                            ),
+                              ),
+                            ],
                           ),
-                          bodyWidget: numberPicker()),
+                        ),
+                        bodyWidget: TextFormField(
+                          controller: height_controller,
+                          decoration: new InputDecoration(
+                              border: new OutlineInputBorder(
+                                borderRadius: const BorderRadius.all(
+                                  const Radius.circular(50.0),
+                                ),
+                              ),
+                              filled: false,
+                              hintStyle: new TextStyle(color: Colors.grey[700]),
+                              hintText: "Your height",
+                              fillColor: Color(0x50FFFFFF)),
+                          onTap: () {
+                            showDialog(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return CupertinoAlertDialog(
+                                    actions: [
+                                      ElevatedButton(
+                                        onPressed: () {
+                                          Navigator.of(context).pop();
+                                        },
+                                        child: Text('Set'),
+                                        style: ElevatedButton.styleFrom(
+                                            primary:
+                                                Theme.of(context).accentColor),
+                                      )
+                                    ],
+                                    content: numberPicker(),
+                                  );
+                                });
+                          },
+                        ),
+                      ),
                       PageViewModel(
                         titleWidget: Padding(
                           padding: EdgeInsets.only(top: 100.00),
@@ -513,6 +626,7 @@ class _InfoTileState extends State<InfoTile> {
                           radioButtonValue: (value) {
                             setState(() {
                               exercise = value.toString();
+                              Gexercise = exercise;
                               height = height;
                               star_sign = star_sign;
                               pets = pets;
@@ -592,6 +706,7 @@ class _InfoTileState extends State<InfoTile> {
                           radioButtonValue: (value) {
                             setState(() {
                               star_sign = value.toString();
+                              Gstar_sign = star_sign;
                             });
                           },
                         ),
@@ -639,6 +754,7 @@ class _InfoTileState extends State<InfoTile> {
                           radioButtonValue: (value) {
                             setState(() {
                               pets = value.toString();
+                              Gpets = pets;
                             });
                           },
                         ),
@@ -686,6 +802,7 @@ class _InfoTileState extends State<InfoTile> {
                           radioButtonValue: (value) {
                             setState(() {
                               drinking = value.toString();
+                              Gdrinking = drinking;
                             });
                           },
                         ),
@@ -734,6 +851,7 @@ class _InfoTileState extends State<InfoTile> {
                             setState(
                               () {
                                 smoking = value.toString();
+                                Gsmoking = smoking;
                               },
                             );
                           },
@@ -792,6 +910,7 @@ class _InfoTileState extends State<InfoTile> {
                           radioButtonValue: (value) {
                             setState(() {
                               looking_for = value.toString();
+                              Glooking_for = looking_for;
                             });
                           },
                         ),
@@ -801,6 +920,9 @@ class _InfoTileState extends State<InfoTile> {
                     dotsFlex: 0,
                     showSkipButton: true,
                     showNextButton: true,
+                    onChange: (position) {
+                      updateUserPrefs();
+                    },
                     next: const Icon(Icons.arrow_forward),
                     onSkip: () => introKey.currentState.controller.nextPage(
                         duration: Duration(milliseconds: 400),
@@ -833,6 +955,7 @@ class _InfoTileState extends State<InfoTile> {
   }
 
   void _onIntroEnd(context) {
+    updateUserPrefs();
     Navigator.of(context).pop();
   }
 }
@@ -846,32 +969,37 @@ class _numberPickerState extends State<numberPicker> {
   int _currentIntValue = 150;
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            NumberPicker(
-              value: _currentIntValue,
-              minValue: 90,
-              maxValue: 220,
-              haptics: true,
-              decoration: BoxDecoration(
-                border: Border(
-                    top: BorderSide(width: 0.75, color: Colors.white),
-                    bottom: BorderSide(width: 0.75, color: Colors.white)),
+    return Center(
+      child: Column(
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              NumberPicker(
+                value: _currentIntValue,
+                minValue: 90,
+                maxValue: 220,
+                haptics: true,
+                decoration: BoxDecoration(
+                  border: Border(
+                      top: BorderSide(width: 0.75, color: Colors.white),
+                      bottom: BorderSide(width: 0.75, color: Colors.white)),
+                ),
+                onChanged: (value) => setState(() {
+                  _currentIntValue = value;
+                  height_controller.text = _currentIntValue.toString() + ' cm';
+                  print(height_controller.text);
+                  Gheight = height_controller.text;
+                  //height = _currentIntValue.toString();
+                }),
               ),
-              onChanged: (value) => setState(() {
-                _currentIntValue = value;
-                //height = _currentIntValue.toString();
-              }),
-            ),
-            Text(
-              'cm',
-            ),
-          ],
-        ),
-      ],
+              Text(
+                'cm',
+              ),
+            ],
+          ),
+        ],
+      ),
     );
   }
 }

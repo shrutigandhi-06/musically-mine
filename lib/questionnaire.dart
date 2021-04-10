@@ -12,6 +12,8 @@ class Questionnaire extends StatefulWidget {
   _QuestionnaireState createState() => _QuestionnaireState();
 }
 
+String id;
+
 class _QuestionnaireState extends State<Questionnaire> {
   final introKey = GlobalKey<IntroductionScreenState>();
   GlobalKey<FormState> name_key = GlobalKey<FormState>();
@@ -24,7 +26,7 @@ class _QuestionnaireState extends State<Questionnaire> {
   final city_controller = TextEditingController();
   final state_controller = TextEditingController();
   final date_controller = TextEditingController();
-  String gender, interested_gender, id;
+  String gender, interested_gender;
   int user_age;
 
   List<String> artists_list = [];
