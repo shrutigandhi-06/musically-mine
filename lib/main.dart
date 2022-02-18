@@ -35,7 +35,11 @@ class SignUp extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Image.asset('images/logo.png'),
+              Image(
+                image: AssetImage('images/musicallyMineLogo.png'),
+                width: MediaQuery.of(context).size.height * 0.35,
+                height: MediaQuery.of(context).size.width * 0.35,
+              ),
               SizedBox(
                 height: 5.0,
               ),

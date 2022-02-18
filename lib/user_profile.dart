@@ -35,6 +35,24 @@ File _image1, _image2, _image3, _image4, _image5;
 List<String> interests = [];
 String description = '';
 
+Widget buildChips() {
+  return Wrap(
+    direction: Axis.horizontal,
+    children: [
+      for (int i = 0; i < interests.length; i++)
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 3.0),
+          child: Chip(
+            label: Text(
+              interests[i],
+            ),
+            backgroundColor: Color(0xffF6265A),
+          ),
+        ),
+    ],
+  );
+}
+
 class _UserProfileState extends State<UserProfile> {
   _imgFromCamera(int pos) async {
     var image = await ImagePicker.pickImage(
@@ -125,48 +143,23 @@ class _UserProfileState extends State<UserProfile> {
   }
 
   @override
-  void dispose() {
-    // TODO: implement dispose
-    super.dispose();
-    // animationController.dispose() instead of your controller.dispose
-  }
-
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   sendUserPrefs();
-  //   sendUserProfile();
-  //   isButtonEnabled = false;
-  //   print("Printing data: " +
-  //       Gexercise +
-  //       " " +
-  //       Gpets +
-  //       " " +
-  //       Gsmoking +
-  //       " " +
-  //       Gdrinking +
-  //       " " +
-  //       Glooking_for +
-  //       " " +
-  //       Gstar_sign);
-  // }
-
-  Widget buildChips() {
-    return Wrap(
-      direction: Axis.horizontal,
-      children: [
-        for (int i = 0; i < interests.length; i++)
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 3.0),
-            child: Chip(
-              label: Text(
-                interests[i],
-              ),
-              backgroundColor: Theme.of(context).accentColor,
-            ),
-          ),
-      ],
-    );
+  void initState() {
+    super.initState();
+    sendUserPrefs();
+    sendUserProfile();
+    isButtonEnabled = false;
+    print("Printing data: " +
+        Gexercise +
+        " " +
+        Gpets +
+        " " +
+        Gsmoking +
+        " " +
+        Gdrinking +
+        " " +
+        Glooking_for +
+        " " +
+        Gstar_sign);
   }
 
   @override
@@ -629,55 +622,6 @@ Future<void> sendUserProfile() async {
 }
 
 Future<void> updateUserProfile() async {
-//   final uri = Uri.parse("");
-//   var request = http.MultipartRequest('POST', uri);
-//   request.fields['id'] = id;
-//   request.fields['description'] = 'Demo Description';
-//   var pic = await http.MultipartFile.fromPath('image', _image1.toString());
-//   request.files.add(pic);
-//   var response = await request.send();
-//
-//   print(response.statusCode);
-// }
-
-  /*var request = http.MultipartRequest(
-      'POST',
-      Uri.parse(
-          'https://musically-mine.000webhostapp.com/updateUserProfile.php'));
-  request.fields['id'] = id;
-  request.fields['description'] = 'Demo Description';
-  request.fields['interests'] = final_values.toString();
-  request.files.add(http.MultipartFile.fromBytes(
-    'picture',
-    File(_image1.path).readAsBytesSync(),
-    filename: 'img_1',
-  ));
-  request.files.add(http.MultipartFile.fromBytes(
-    'picture',
-    File(_image1.path).readAsBytesSync(),
-    filename: 'img_2',
-  ));
-  request.files.add(http.MultipartFile.fromBytes(
-    'picture',
-    File(_image1.path).readAsBytesSync(),
-    filename: 'img_3',
-  ));
-  request.files.add(http.MultipartFile.fromBytes(
-    'picture',
-    File(_image1.path).readAsBytesSync(),
-    filename: 'img_4',
-  ));
-  request.files.add(http.MultipartFile.fromBytes(
-    'picture',
-    File(_image1.path).readAsBytesSync(),
-    filename: 'img_5',
-  ));
-  var res = await request.send();
-
-  print(_image1.path);
-  print(res.statusCode);
-  print(res.request.url);*/
-
   var headers = <String, String>{
     'Content-Type': 'application/x-www-form-urlencoded',
   };
@@ -741,35 +685,13 @@ class _InfoTileState extends State<InfoTile> {
       looking_for = '';
 
   @override
-  void initState() {
-    super.initState();
-    sendUserPrefs();
-    sendUserProfile();
-    isButtonEnabled = false;
-    print("Printing data: " +
-        Gexercise +
-        " " +
-        Gpets +
-        " " +
-        Gsmoking +
-        " " +
-        Gdrinking +
-        " " +
-        Glooking_for +
-        " " +
-        Gstar_sign);
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 12.0, vertical: 5.0),
+      padding: EdgeInsets.symmetric(horizontal: 12.0, vertical: 6.0),
       child: Container(
         decoration: BoxDecoration(
-          color: Colors.white.withAlpha(20),
-          borderRadius: BorderRadius.circular(10.0),
-          border: Border.all(color: Colors.grey),
-        ),
+            borderRadius: BorderRadius.circular(10.0),
+            border: Border.all(color: Colors.grey)),
         child: ListTile(
           leading: widget.leading,
           title: widget.title,
@@ -991,12 +913,12 @@ class _InfoTileState extends State<InfoTile> {
                               setState(() {
                                 star_sign = value.toString();
                                 Gstar_sign = star_sign;
-                                // exercise = exercise;
-                                // height = height;
-                                // pets = pets;
-                                // drinking = drinking;
-                                // smoking = smoking;
-                                // looking_for = looking_for;
+                                exercise = exercise;
+                                height = height;
+                                pets = pets;
+                                drinking = drinking;
+                                smoking = smoking;
+                                looking_for = looking_for;
                               });
                             },
                           ),
@@ -1235,10 +1157,10 @@ class _InfoTileState extends State<InfoTile> {
                       showSkipButton: true,
                       showNextButton: true,
                       onChange: (position) {
+                        updateUserPrefs();
                         FocusScopeNode currentFocus = FocusScope.of(context);
                         currentFocus.unfocus();
-                        updateUserPrefs();
-                        initState();
+                        // initState();
                       },
                       next: const Icon(Icons.arrow_forward),
                       onSkip: () => introKey.currentState.controller.nextPage(
@@ -1275,12 +1197,13 @@ class _InfoTileState extends State<InfoTile> {
   void _onIntroEnd(context) {
     updateUserPrefs();
     Navigator.of(context).pop();
-    initState();
+    // initState();
   }
 
   Future<bool> _onBackPressed() {
     Navigator.of(context).pop();
-    initState();
+    updateUserPrefs();
+    // initState();
   }
 }
 

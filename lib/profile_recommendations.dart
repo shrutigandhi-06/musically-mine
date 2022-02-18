@@ -1,9 +1,11 @@
 import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:swipeable_card_stack/swipeable_card_stack.dart';
 import 'package:http/http.dart' as http;
 import 'questionnaire.dart';
+import 'user_profile.dart';
 
 class Recommendations extends StatefulWidget {
   @override
@@ -16,9 +18,8 @@ class _RecommendationsState extends State<Recommendations> {
       user_age = [],
       user_city = [],
       user_state = [];
-
   int length = 0;
-
+  int counter = 3;
   CardController _cardController = CardController();
 
   @override
@@ -35,35 +36,44 @@ class _RecommendationsState extends State<Recommendations> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Image.asset(
-                'images/loader.gif',
+                'images/love_loader.gif',
                 width: 300.0,
                 height: 300.0,
               ),
-              Text('Brewing your matches...'),
-            ],
-          )
-        : Stack(
-            children: [
-              SwipeableCardsSection(
-                context: context,
-                enableSwipeUp: false,
-                enableSwipeDown: false,
-                cardController: _cardController,
-                //cardWidthTopMul: 1,
-                cardHeightTopMul: 1,
-                cardHeightBottomMul: 1,
-                //cardWidthBottomMul: 1,
-                items: [
-                  for (int i = 0; i < length; i++)
-                    userCard(
-                      name: user_name[i],
-                      age: user_age[i],
-                      city: user_city[i],
-                      state: user_state[i],
-                    )
-                ],
+              Text(
+                'Fetching your playlist 😉',
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0),
               ),
             ],
+          )
+        : SwipeableCardsSection(
+            context: context,
+            enableSwipeUp: false,
+            enableSwipeDown: false,
+            cardController: _cardController,
+            cardHeightTopMul: 1,
+            cardHeightBottomMul: 1,
+            items: [
+              for (int i = 0; i < length; i++)
+                userCard(
+                  name: user_name[i],
+                  age: user_age[i],
+                  city: user_city[i],
+                  state: user_state[i],
+                )
+            ],
+            onCardSwiped: (dir, index, widget) {
+              if (counter < length) {
+                _cardController.addItem(
+                  userCard(
+                      name: user_name[counter],
+                      age: user_age[counter],
+                      city: user_city[counter],
+                      state: user_state[counter]),
+                );
+                counter++;
+              }
+            },
           );
   }
 
@@ -75,7 +85,7 @@ class _RecommendationsState extends State<Recommendations> {
         width: MediaQuery.of(context).size.width,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(30.0),
-          color: Color(0x30FFFFFF),
+          color: Theme.of(context).primaryColor,
         ),
         child: ClipRRect(
           borderRadius: BorderRadius.circular(30.0),
@@ -112,7 +122,20 @@ class _RecommendationsState extends State<Recommendations> {
                     )
                   ],
                 ),
-                Text('hiii'),
+                Container(
+                  padding: EdgeInsets.all(5.0),
+                  width: MediaQuery.of(context).size.width,
+                  child: interests.length == 0
+                      ? Padding(
+                          padding: EdgeInsets.all(15.0),
+                          child: Text(
+                            'About Me and Interests will be shown here',
+                            style:
+                                TextStyle(fontSize: 15.0, color: Colors.grey),
+                          ),
+                        )
+                      : buildChips(),
+                ),
               ],
             ),
           ),

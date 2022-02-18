@@ -18,11 +18,6 @@ List<String> options = [
   'Fashion',
   'Sports',
   'Travel',
-  'Road Trip',
-  'Dancing',
-  'Fashion',
-  'Sports',
-  'Travel',
   'Foodie',
   'Techie',
   'Comedy',
@@ -94,10 +89,10 @@ class _UserInterestsState extends State<UserInterests> {
                           onSaved: (val) => setState(() => formValue = val),
                           validator: (value) {
                             if (value?.isEmpty ?? value == null) {
-                              return 'Please select some categories';
+                              return ''; //'Please select some categories'
                             }
                             if (value.length > 5) {
-                              return "Can't select more than 5 categories";
+                              return ''; //'Can't select more than 5 categories'
                             }
                             return null;
                           },
@@ -136,19 +131,20 @@ class _UserInterestsState extends State<UserInterests> {
                                     ),
                                   ),
                                 ),
-                                Container(
-                                    padding: const EdgeInsets.fromLTRB(
-                                        15, 0, 15, 10),
-                                    alignment: Alignment.centerLeft,
-                                    child: Text(
-                                      state.errorText ??
-                                          state.value.length.toString() +
-                                              '/5 selected',
-                                      style: TextStyle(
-                                          color: state.hasError
-                                              ? Colors.redAccent
-                                              : Colors.green),
-                                    ))
+                                /*Container(
+                                  padding:
+                                      const EdgeInsets.fromLTRB(15, 0, 15, 10),
+                                  alignment: Alignment.centerLeft,
+                                  child: Text(
+                                    state.errorText ??
+                                        state.value.length.toString() +
+                                            '/5 selected',
+                                    style: TextStyle(
+                                        color: state.hasError
+                                            ? Colors.redAccent
+                                            : Colors.green),
+                                  ),
+                                )*/
                               ],
                             );
                           },

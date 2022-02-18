@@ -14,7 +14,7 @@ Widget index(int selected_index) {
       {
         return Center(
           child: Container(
-            child: Text('Tab 0'),
+            child: Text('Chat section is still under development'),
           ),
         );
       }
